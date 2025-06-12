@@ -281,9 +281,17 @@ const handleChange = (
                           e.preventDefault();
                           const input = (editStates[profile.id]?.tagInput ?? '').trim();
                           if (input) {
+                            const newTags = input
+                              .split(',')
+                              .map((tag:any) => tag.trim())
+                              .filter((tag:any) => tag.length > 0);
+                            
                             const existingTags = editStates[profile.id]?.tags ?? [];
-                            if (!existingTags.includes(input)) {
-                              handleChange(profile.id, 'tags', [...existingTags, input]);
+
+                            const filteredNewTags = newTags.filter((tag:any) => !existingTags.includes(tag));
+
+                            if (filteredNewTags.length > 0) {
+                              handleChange(profile.id, 'tags', [...existingTags, ...filteredNewTags]);
                             }
                             handleChange(profile.id, 'tagInput', '');
                           }
